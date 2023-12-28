@@ -33,13 +33,13 @@
 
 #define GPIO_DS18B20_0       (GPIO_NUM_36)
 #define MAX_DEVICES          (8)
-#define DS18B20_RESOLUTION   (DS18B20_RESOLUTION_10_BIT)
+#define DS18B20_RESOLUTION   (DS18B20_RESOLUTION_12_BIT)
 #define SAMPLE_PERIOD        (1000)   // milliseconds
 
 extern "C"{
     void app_main();
 }
-void temp_measure(void *arg)
+static void temp_measure(void *arg)
 {
     float *temp = (float *)arg;
     gpio_pulldown_dis(GPIO_DS18B20_0);
@@ -136,6 +136,7 @@ void temp_measure(void *arg)
 
 void app_main()
 {
-    float temp;
+    float temp = -1.0f;
+    
     xTaskCreate(temp_measure, "temp_measure", configMINIMAL_STACK_SIZE * 3, &temp, 5, NULL);
 }
